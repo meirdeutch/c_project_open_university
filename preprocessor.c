@@ -3,19 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct mcro
-{
-    char mcro_name[31];
-    char *mcro_content[81];
-    int line_count;
-} mcro;
 
-int find_mcro_in_table(char *mcro_name, mcro *mcro_table, int mcro_count)
+mcro *mcro_table = NULL;
+int mcro_count = 0;
+int find_mcro_in_table(char *word)
 {
     int i = 0;
     for (i = 0; i < mcro_count; i++)
     {
-        if (!strcmp(mcro_name, mcro_table[i].mcro_name))
+        if (!strcmp(word, mcro_table[i].mcro_name))
         {
             return i;
         }
@@ -25,12 +21,11 @@ int find_mcro_in_table(char *mcro_name, mcro *mcro_table, int mcro_count)
 
 int preprocessor(char *file_name)
 {
-    mcro *mcro_table = NULL, *temp = NULL;
-    int mcro_count = 0;
     char line[81];
     char word[31];
     char sorce_file_name[31], des_file_name[31];
     int line_length, position, i, j, in_mcro = 0;
+    mcro *temp = NULL;
     FILE *sorce, *destination;
     sprintf(sorce_file_name, "%s.as", file_name);
     sprintf(des_file_name, "%s.am", file_name);
@@ -83,7 +78,7 @@ int preprocessor(char *file_name)
             if (!strcmp(word, "mcro"))
             {
                 sscanf(line, "%*s%s", word);
-                position = find_mcro_in_table(word, mcro_table, mcro_count);
+                position = find_mcro_in_table(word);
                 /*check if the mcro name already exists*/
                 if (position != -1){
                     printf("Error: You cannot declare two macros with the same name");
@@ -100,13 +95,14 @@ int preprocessor(char *file_name)
                     remove(des_file_name);
                     fclose(sorce);
                     fclose(destination);
+                    return 1;
                 }
                 mcro_table = temp;
                 sscanf(word, "%s",mcro_table[mcro_count].mcro_name);
                 mcro_table[mcro_count].line_count = 0;
                 continue;
             }
-            position = find_mcro_in_table(word, mcro_table, mcro_count);
+            position = find_mcro_in_table(word);
             /*if it is not a mcro name then write the line as it is*/
             if (position == -1)
             {
@@ -124,14 +120,5 @@ int preprocessor(char *file_name)
     }
     fclose(sorce);
     fclose(destination);
-
-    for (i = 0; i < mcro_count; i++)
-    {
-        for (j = 0; j < mcro_table[i].line_count; j++)
-        {
-            free(mcro_table[i].mcro_content[j]);
-        }
-    }
-    free(mcro_table);
     return 0;
 }
