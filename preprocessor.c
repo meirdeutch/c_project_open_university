@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 mcro *mcro_table = NULL;
 int mcro_count = 0;
 int find_mcro_in_table(char *word)
@@ -80,7 +79,8 @@ int preprocessor(char *file_name)
                 sscanf(line, "%*s%s", word);
                 position = find_mcro_in_table(word);
                 /*check if the mcro name already exists*/
-                if (position != -1){
+                if (position != -1)
+                {
                     printf("Error: You cannot declare two macros with the same name");
                     remove(des_file_name);
                     fclose(sorce);
@@ -98,7 +98,7 @@ int preprocessor(char *file_name)
                     return 1;
                 }
                 mcro_table = temp;
-                sscanf(word, "%s",mcro_table[mcro_count].mcro_name);
+                sscanf(word, "%s", mcro_table[mcro_count].mcro_name);
                 mcro_table[mcro_count].line_count = 0;
                 continue;
             }
