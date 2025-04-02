@@ -1,4 +1,4 @@
-MAIN:            add      r3
+sub:            add      r3
 LOOP:  prn #48 , LIST
 mcro  a_mc  
 cmp     K, #-6 
@@ -11,9 +11,11 @@ mcroend
   bne END
 a_mc 
   dec K 
+  #400
+.entry MAIN  
            jmp  &LOOP      
 END:  stop 
-STR:            .string "abcd"
+STR:            .string "abcd
 LIST:            .data 6, -9 
                        .data    -100 
 K:            .data 31

@@ -189,14 +189,13 @@ int is_operand_type_legal(int operand_type, int instruction, int is_sorce_operan
  */
 int first_pass(const char *file_name, const mcro_table *table, symbol_table *symbols_table, int **instruction_area, int **data_area, int *ICF, int *DCF, int *there_is_an_error)
 {
-    char line[82], word[80], symbol_name[31], second_word[31];
+    char line[82], word[80], symbol_name[31];
     char *sorce_file_name = malloc(strlen(file_name) + 4);
-    sprintf(sorce_file_name, "%s.am", file_name);
     char operands[2][31];
-    int i, j, destination_operand_type, sorce_operand_type, position, distance, number, line_length, word_length, line_counter = 0, DC = 0, IC = 100, L = 0, there_symbol_definition;
+    int i, destination_operand_type, sorce_operand_type, position, number, line_length, word_length, line_counter = 0, DC = 0, IC = 100, L = 0, there_symbol_definition;
     int *temp = NULL;
     FILE *sorce;
-
+    sprintf(sorce_file_name, "%s.am", file_name);
     sorce = fopen(sorce_file_name, "r");
     if (sorce == NULL)
     {
@@ -408,7 +407,6 @@ int first_pass(const char *file_name, const mcro_table *table, symbol_table *sym
                     }
 
                     /* Generate machine code for the instruction */
-                    j = IC;
                     switch (i)
                     {
                         /*Handle different operand count cases*/
@@ -676,15 +674,13 @@ int first_pass(const char *file_name, const mcro_table *table, symbol_table *sym
 
 int second_pass(const char *file_name, const mcro_table *table, symbol_table *symbols_table, int **instruction_area, int **data_area, int *ICF, int *DCF, int *there_is_an_error)
 {
-    char line[82], word[31], symbol_name[31], second_word[31];
+    char line[82], word[31];
     char *sorce_file_name = malloc(strlen(file_name) + 4);
     char *entry_file_name, *extern_file_name;
-    sprintf(sorce_file_name, "%s.am", file_name); /*Create the source file name with .am extension*/
     char operands[2][31];                         /*Array to hold operand values (for instruction)*/
-    int i, j, destination_operand_type, sorce_operand_type, position, distance, number, line_length, word_length, line_counter = 0, DC = 0, IC = 100, L = 0, there_enrty_symbol = 0, there_extern_symbol = 0;
-    int *temp = NULL;
+    int i, destination_operand_type, sorce_operand_type, position, distance, word_length, line_counter = 0, IC = 100, L = 0, there_enrty_symbol = 0, there_extern_symbol = 0;
     FILE *sorce, *entry_file, *extern_file;
-
+    sprintf(sorce_file_name, "%s.am", file_name); /*Create the source file name with .am extension*/
     /*Open the source file for reading*/
     sorce = fopen(sorce_file_name, "r");
     if (sorce == NULL)
@@ -752,7 +748,13 @@ int second_pass(const char *file_name, const mcro_table *table, symbol_table *sy
             /*Handle case with one operand (destination operand)*/
             case 1:
                 destination_operand_type = check_operand_type(operands[0], symbols_table); /*Get the operand type*/
-                if (!is_operand_type_legal(destination_operand_type, position, 0))         /* Check if it's legal for the instruction*/
+                if (destination_operand_type == -1)
+                {
+                    printf("Error: in file %s on line %d: operand not legal\n", sorce_file_name, line_counter);
+                    *there_is_an_error = 1; /* Flag error*/
+                    break;
+                }
+                if (!is_operand_type_legal(destination_operand_type, position, 0)) /* Check if it's legal for the instruction*/
                 {
                     printf("Error in file %s on line %d: The instruction %s does not support the destination operand of operand type %d\n",
                            sorce_file_name, line_counter, instruction_table[position].instruction_name, destination_operand_type);
