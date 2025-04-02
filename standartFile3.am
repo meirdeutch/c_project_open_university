@@ -1,0 +1,15 @@
+;This is a valid file
+mov #-1, r2
+    add #50, x
+.entry x
+.extern y
+x: .data 23
+    add #50, x
+dec x 
+dec y
+clr r1 
+    add #50, x
+mov x, r1
+cmp x, r1
+    add #50, x
+sub  #3, r1

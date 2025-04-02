@@ -1,10 +1,12 @@
-my_project: main.o preprocessor.o first_pass.o instruction.o
-	gcc -ansi -pedantic -Wall main.o preprocessor.o first_pass.o instruction.o -o my_project
-main.o: main.c defines.h
+my_project: main.o preprocessor.o passes.o instruction.o createObjectFiles.o
+	gcc -ansi -pedantic -Wall main.o preprocessor.o passes.o instruction.o createObjectFiles.o -o my_project
+main.o: main.c instructions.h mcro.h passes.h createObjectFiles.h
 	gcc -c -ansi -pedantic -Wall main.c -o main.o
-preprocessor.o: preprocessor.c defines.h
+preprocessor.o: preprocessor.c mcro.h instructions.h
 	gcc -c -ansi -pedantic -Wall preprocessor.c -o preprocessor.o	
-first_pass.o: first_pass.c defines.h
-	gcc -c -ansi -pedantic -Wall first_pass.c -o first_pass.o
-instruction.o: instruction.c defines.h
+passes.o: passes.c instructions.h mcro.h passes.h
+	gcc -c -ansi -pedantic -Wall passes.c -o passes.o
+instruction.o: instruction.c instructions.h
 	gcc -c -ansi -pedantic -Wall instruction.c -o instruction.o	
+createObjectFiles.o: createObjectFiles.c createObjectFiles.h
+	gcc -c -ansi -pedantic -Wall createObjectFiles.c -o createObjectFiles.o	
