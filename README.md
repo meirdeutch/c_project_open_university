@@ -29,14 +29,14 @@
 
 ## 📤 קבצי פלט
 
-בהתאם לקובץ הקלט `standartFile.as`, יווצרו הקבצים הבאים:
+בהתאם לקובץ הקלט `standartFile1.as`, יווצרו הקבצים הבאים:
 
 | קובץ | תוכן |
 |------|-------|
-| `standartFile.am` | הקובץ לאחר הרחבת מקרואים |
-| `standartFile.ob` | הקוד המתורגם בפורמט הקסדצימלי |
-| `standartFile.ent` | תוויות כניסה (entry) |
-| `standartFile.ext` | תוויות חיצוניות (external) |
+| `standartFile1.am` | הקובץ לאחר הרחבת מקרואים |
+| `standartFile1.ob` | הקוד המתורגם בפורמט הקסדצימלי |
+| `standartFile1.ent` | תוויות כניסה (entry) |
+| `standartFile1.ext` | תוויות חיצוניות (external) |
 
 ---
 
@@ -44,4 +44,4 @@
 
 קומפילציה:
 
-יש קובץ makefile לקומפילציה ואח"כ מריצים את הקובץ שנקרא my_project
+יש קובץ makefile לקומפילציה ואח"כ מריצים את הקובץ שנקרא my_project ובהמשך לזה כותבים בשורת הפקודה את שמות הקבצים (ללוא הסיומת) שרוצים לעבד
